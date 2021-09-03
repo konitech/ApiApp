@@ -25,14 +25,25 @@ class ApiAdapter(private val context: Context): RecyclerView.Adapter<RecyclerVie
     // Itemを押したときのメソッド
     var onClickItem: ((String) -> Unit)? = null
 
-    // 表示リスト更新時に呼び出すメソッド
     fun refresh(list: List<Shop>) {
-        items.apply {
-            clear()
-            addAll(list)
-        }
-        notifyDataSetChanged()
+        update(list, false)
     }
+
+    fun add(list: List<Shop>) {
+        update(list, true)
+    }
+
+    // 表示リスト更新時に呼び出すメソッド
+    fun update(list: List<Shop>, isAdd: Boolean) {
+        items.apply {
+            if(!isAdd){ // 追加のときは、Clearしない
+                clear() // items を 空にする
+            }
+            addAll(list) // itemsにlistを全て追加する
+        }
+        notifyDataSetChanged() // recyclerViewを再描画させる
+    }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         // ViewHolderを継承したApiItemViewHolderオブジェクトを生成し戻す
